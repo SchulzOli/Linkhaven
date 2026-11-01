@@ -74,11 +74,15 @@ Computed on your device from the active board:
 
 ## Sync
 
-With **Device sync** on, this tab connects the device: create a sync or join
-one with its sync code or QR code, on the public server, your own, or a
-WebDAV folder. Once connected it shows the devices in the sync (with
-**Remove** for a lost one), **Workspaces on this device** (all, or only the
-ones you tick, e.g. on a work computer) and the code to add another device.
+With **Device sync** on, this tab connects the device to a Linkhaven server
+(the public one or your own) or to a WebDAV folder. Once connected it shows
+**Workspaces on this device** (all, or only the ones you tick, e.g. on a work
+computer).
+
+With a Linkhaven server, you create a sync or join one with its sync code or
+QR code, and the tab also lists the devices in the sync (with **Remove** for
+a lost one) and shows the code to add another device. A WebDAV folder uses
+your folder's login and a sync passphrase on each device instead.
 See [Web app and sync](web-app-and-sync.html).
 
 ![The Sync tab](assets/screenshots/12-device-sync.png)
