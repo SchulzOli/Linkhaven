@@ -1,15 +1,21 @@
 {
   "manifest_version": 3,
   "name": "Linkhaven",
-  "version": "1.0.3",
+  "version": "1.2.0",
   "description": "Your new tab as a link canvas: links, groups, notes, charts and news feeds. Local-first, with optional encrypted sync.",
   "icons": {
     "16": "icons/icon-16.png",
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
-  "optional_permissions": ["history", "topSites"],
-  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "optional_permissions": [
+    "history",
+    "topSites"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
@@ -21,7 +27,9 @@
       "id": "linkhub@extension",
       "strict_min_version": "140.0",
       "data_collection_permissions": {
-        "required": ["none"]
+        "required": [
+          "none"
+        ]
       }
     }
   }
