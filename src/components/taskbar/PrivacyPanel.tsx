@@ -5,6 +5,10 @@ import {
   type NetworkFeatureKey,
 } from '../../contracts/networkFeatures'
 import { isChartNode, isFeedNode } from '../../contracts/pictureNode'
+import {
+  releaseDataCollection,
+  requestDataCollection,
+} from '../../features/privacy/dataCollectionConsent'
 import { useNetworkFeaturesStore } from '../../state/useNetworkFeaturesStore'
 import { useWorkspaceStore } from '../../state/useWorkspaceStore'
 import { PanelSection, SettingRow, Switch } from '../ui/panel/Panel'
@@ -181,7 +185,20 @@ export function PrivacyPanel({ menuId, tabListId }: PrivacyPanelProps) {
               <Switch
                 ariaLabel={FEATURE_LABELS[row.key]}
                 checked={features[row.key]}
-                onChange={(checked) => features.setFeature(row.key, checked)}
+                onChange={(checked) => {
+                  if (!checked) {
+                    features.setFeature(row.key, false)
+                    void releaseDataCollection(row.key)
+                    return
+                  }
+
+                  // Firefox asks first for features that send data.
+                  void requestDataCollection(row.key).then((granted) => {
+                    if (granted) {
+                      features.setFeature(row.key, true)
+                    }
+                  })
+                }}
               />
             </SettingRow>
           ))}

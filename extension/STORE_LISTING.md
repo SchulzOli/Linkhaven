@@ -125,6 +125,10 @@ No account. No analytics. No ads. Off by default: every feature that uses the ne
 
 Linkhaven is a new-tab override extension. It replaces the browser new tab page with a local-first link canvas application.
 
+This is a new listing that replaces the developer's earlier listing of the same app under its former name; the app was renamed to Linkhaven.
+
+Firefox data collection: the manifest declares no required data collection and two optional categories, each requested with `permissions.request({ data_collection })` only when the user turns the matching feature on in Menu → Privacy, and released when it is turned off: `browsingActivity` for the AI arrangement (titles and addresses of candidate pages go to the Anthropic API with the user's own key) and `bookmarksInfo` for device sync (the user's boards, end-to-end encrypted, go to the sync server the user chooses).
+
 The extension stores all user data locally in IndexedDB plus localStorage fallback snapshots, including workspaces, workspace names, link cards, groups, picture and note nodes, gallery images, templates, themes, appearance preferences, and local usage statistics used by the in-app Statistics view. No user account or sign-in is involved; the optional device sync described below is end-to-end encrypted and off by default.
 
 Out of the box the extension makes no network requests and needs no server: it is a pure, local link dashboard. Every request below belongs to a feature that is off by default and only works after the user turns it on in Menu → Privacy:

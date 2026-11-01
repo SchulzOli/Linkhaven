@@ -18,10 +18,11 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "linkhub@extension",
-      "strict_min_version": "140.0",
+      "id": "linkhaven@oli-tech.eu",
+      "strict_min_version": "142.0",
       "data_collection_permissions": {
-        "required": ["none"]
+        "required": ["none"],
+        "optional": ["browsingActivity", "bookmarksInfo"]
       }
     }
   }
