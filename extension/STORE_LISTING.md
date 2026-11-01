@@ -15,7 +15,7 @@ to create the listings and connect them to the Release workflow.
 - [Edge Add-ons, field by field](#edge-add-ons-field-by-field)
 - [Firefox (AMO), field by field](#firefox-amo-field-by-field)
 - [After the first upload: connect the Release workflow](#after-the-first-upload-connect-the-release-workflow)
-- [The old listings](#the-old-listings)
+- [The old listings](#the-old-listings-chrome-edge)
 - [Notes to reviewer (AMO)](#notes-to-reviewer-amo)
 - [Notes for certification (Edge)](#notes-for-certification-edge)
 - [Building from source (for reviewers)](#building-from-source-for-reviewers)
@@ -24,11 +24,13 @@ to create the listings and connect them to the Release workflow.
 
 ## How releases reach the stores
 
-- **New listings.** The app was renamed to Linkhaven, and the old listings
-  can't be renamed, so all three stores get new listings (new IDs). The
-  Firefox add-on ID is `linkhaven@oli-tech.eu`.
-- **The first version is uploaded by hand.** No store API can create a
-  listing. Run **Actions → Release** with the stores unticked: it builds,
+- **Chrome and Edge: new listings.** The app was renamed to Linkhaven, and
+  those listings can't be renamed, so they got new listings (new IDs).
+- **Firefox: the existing listing, renamed.** AMO allows renaming, so the
+  add-on keeps its ID `linkhub@extension` and Firefox users get updates as
+  before. Never change that ID: AMO would refuse every update.
+- **The first version of a new listing is uploaded by hand.** No store API
+  can create a listing. Run **Actions → Release** with the stores unticked: it builds,
   tags and attaches `linkhaven-extension-vX.Y.Z.zip` to the GitHub release.
   Upload that ZIP when creating each listing.
 - **Every later version is automatic.** Once the new IDs are in the
@@ -251,16 +253,17 @@ is turned off.
 
 ## Firefox (AMO), field by field
 
-[Developer Hub](https://addons.mozilla.org/developers/) → **Submit a New Add-on** → _On this site_ → upload the ZIP.
+The existing listing (ID `linkhub@extension`), renamed:
+[Developer Hub](https://addons.mozilla.org/developers/) → My Add-ons → Linkhaven.
 
-1. **Source code:** _Yes_ → upload the release's _Source code (zip)_ (the
-   build is bundled and minified).
-2. **Describe add-on:** Name _Linkhaven_, Summary, Description, Categories
-   _Tabs_ and _Bookmarks_, Support email or website, Homepage, License _MIT_,
-   Privacy policy (paste the URL or text).
-3. **Notes to reviewer:** paste [Notes to reviewer](#notes-to-reviewer-amo).
-4. After approval: **Edit Product Page** → screenshots, Contributions URL.
-   Note the **slug** from `addons.mozilla.org/…/addon/<slug>/`.
+1. **Edit Product Page:** Name _Linkhaven_, Summary, Description,
+   Categories _Tabs_ and _Bookmarks_, Homepage, Support, screenshots,
+   Contributions URL.
+2. **Privacy policy:** paste the URL or text.
+3. New versions come from the Release workflow. By hand: **Upload New
+   Version** → ZIP, plus the release's _Source code (zip)_ when asked (the
+   build is bundled and minified), and the
+   [Notes to reviewer](#notes-to-reviewer-amo).
 
 ---
 
@@ -268,11 +271,11 @@ is turned off.
 
 Repository → **Settings → Secrets and variables → Actions → Secrets**:
 
-| Secret            | Value                              |
-| ----------------- | ---------------------------------- |
-| `CHROME_EXT_ID`   | the new Chrome item ID             |
-| `EDGE_PRODUCT_ID` | the new Edge Product ID            |
-| `FIREFOX_EXT_ID`  | the AMO slug (default `linkhaven`) |
+| Secret            | Value                                |
+| ----------------- | ------------------------------------ |
+| `CHROME_EXT_ID`   | the new Chrome item ID               |
+| `EDGE_PRODUCT_ID` | the new Edge Product ID              |
+| `FIREFOX_EXT_ID`  | unchanged (the existing AMO listing) |
 
 `CHROME_PUBLISHER_ID`, `CHROME_SERVICE_ACCOUNT_JSON`, `EDGE_CLIENT_ID`,
 `EDGE_API_KEY` (renew it every 72 days), `FIREFOX_JWT_ISSUER` and
@@ -282,7 +285,7 @@ From then on: **Actions → Release** → version → stores ticked.
 
 ---
 
-## The old listings
+## The old listings (Chrome, Edge)
 
 1. Put this at the top of each old listing's description:
 
@@ -290,8 +293,7 @@ From then on: **Actions → Release** → version → stores ticked.
    > To take your boards along: Menu → Data → Export here, then import the
    > file in Linkhaven.
 
-2. A few weeks later, unlist (Chrome, Firefox) or unpublish (Edge) the old
-   listings.
+2. A few weeks later, unlist (Chrome) or unpublish (Edge) the old listings.
 
 Each extension keeps its own storage, so boards move only by export and
 import (or device sync, once both run a version that has it).
@@ -300,7 +302,7 @@ import (or device sync, once both run a version that has it).
 
 ## Notes to reviewer (AMO)
 
-Linkhaven is a new-tab override extension. It replaces the browser new tab page with a local-first link canvas application. This is a new listing that replaces the developer's earlier listing of the same app under its former name; the app was renamed to Linkhaven.
+Linkhaven is a new-tab override extension. It replaces the browser new tab page with a local-first link canvas application. The app was renamed from LinkHub to Linkhaven; the add-on ID is unchanged.
 
 The extension stores all user data locally in IndexedDB plus localStorage fallback snapshots: workspaces, link cards, groups, picture and note nodes, gallery images, templates, themes, appearance preferences, and local usage statistics for the in-app Statistics view. No account or sign-in is involved.
 
