@@ -424,13 +424,13 @@ function homeBody(pages) {
 <section class="hero">
   <p class="eyebrow">Your new tab, as a canvas</p>
   <h1>Linkhaven</h1>
-  <p class="lead">An infinite board for links, groups, pictures, live charts and news feeds. Local-first: no account, no cloud, no tracking.</p>
+  <p class="lead">An infinite board for links, notes, pictures, live charts and news feeds. Local-first: no account, no tracking, works offline; sync is optional and end-to-end encrypted.</p>
   <div class="hero-actions">
     <a class="button primary" href="getting-started.html">Get started</a>
     <a class="button" href="app/">Open the web app</a>
-    <a class="button" href="https://chromewebstore.google.com/detail/linkhub/dpbgplhiaobnegcbfedihimnoamlpgmd" rel="noopener">Chrome</a>
-    <a class="button" href="https://microsoftedge.microsoft.com/addons/detail/linkhub/gkcpbfphinbaoplepknkinjfkdhljghp" rel="noopener">Edge</a>
-    <a class="button" href="https://addons.mozilla.org/en-US/firefox/addon/link-hub/" rel="noopener">Firefox</a>
+    <a class="button" href="https://chromewebstore.google.com/detail/linkhaven/glcnmoihjckagobgpimgemnibhanlegp" rel="noopener">Chrome</a>
+    <a class="button" href="https://microsoftedge.microsoft.com/addons/search/linkhaven" rel="noopener">Edge</a>
+    <a class="button" href="https://addons.mozilla.org/firefox/addon/linkhaven/" rel="noopener">Firefox</a>
   </div>
 </section>
 <figure class="hero-shot"><img src="assets/screenshots/01-canvas-overview.png" alt="Linkhaven canvas with five groups of link cards" width="1280" height="800" /></figure>
@@ -439,6 +439,9 @@ function homeBody(pages) {
 <h2 id="screenshots">Screenshots</h2>
 <div class="gallery">
   ${[
+    ['11-homelab-app-icons', 'Homelab app icons'],
+    ['10-notes', 'Notes: sketch and write'],
+    ['12-device-sync', 'Encrypted device sync'],
     ['07-charts-and-news', 'Live charts and a merged news feed'],
     ['03-themes-customization', 'Six themes with live previews'],
     ['04-card-edit-styling', 'Edit panel for a link card'],

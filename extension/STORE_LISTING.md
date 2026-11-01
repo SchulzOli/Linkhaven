@@ -46,6 +46,8 @@ to create the listings and connect them to the Release workflow.
 
 ## Listing details (all stores)
 
+Public addresses: [Chrome](https://chromewebstore.google.com/detail/linkhaven/glcnmoihjckagobgpimgemnibhanlegp) · [Edge](https://microsoftedge.microsoft.com/addons/search/linkhaven) (search until the store ID is public) · [Firefox](https://addons.mozilla.org/firefox/addon/linkhaven/)
+
 | Field                                 | Value                                                                                                                  |
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | Name                                  | Linkhaven                                                                                                              |
@@ -271,11 +273,11 @@ The existing listing (ID `linkhub@extension`), renamed:
 
 Repository → **Settings → Secrets and variables → Actions → Secrets**:
 
-| Secret            | Value                                |
-| ----------------- | ------------------------------------ |
-| `CHROME_EXT_ID`   | the new Chrome item ID               |
-| `EDGE_PRODUCT_ID` | the new Edge Product ID              |
-| `FIREFOX_EXT_ID`  | unchanged (the existing AMO listing) |
+| Secret            | Value                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------- |
+| `CHROME_EXT_ID`   | the new Chrome item ID                                                                |
+| `EDGE_PRODUCT_ID` | the new Edge Product ID                                                               |
+| `FIREFOX_EXT_ID`  | the AMO slug `linkhaven` (the listing's address; it was `link-hub` before the rename) |
 
 `CHROME_PUBLISHER_ID`, `CHROME_SERVICE_ACCOUNT_JSON`, `EDGE_CLIENT_ID`,
 `EDGE_API_KEY` (renew it every 72 days), `FIREFOX_JWT_ISSUER` and
@@ -289,7 +291,7 @@ From then on: **Actions → Release** → version → stores ticked.
 
 1. Put this at the top of each old listing's description:
 
-   > **This extension is now Linkhaven.** Get it here: <link to the new listing>.
+   > **This extension is now Linkhaven.** Get it here: Chrome https://chromewebstore.google.com/detail/linkhaven/glcnmoihjckagobgpimgemnibhanlegp · Edge https://microsoftedge.microsoft.com/addons/search/linkhaven
    > To take your boards along: Menu → Data → Export here, then import the
    > file in Linkhaven.
 

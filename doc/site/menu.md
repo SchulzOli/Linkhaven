@@ -1,13 +1,14 @@
 ---
 title: Menu and settings
-description: The six menu tabs - Options, Themes, Templates, Statistics, Data and Privacy.
+description: The menu tabs - Options, Themes, Templates, Statistics, Sync, Data and Privacy.
 order: 5
 section: Guide
 ---
 
 # Menu and settings
 
-Open the menu with ☰ in the taskbar. It has six tabs.
+Open the menu with ☰ in the taskbar. It has six tabs; **Sync** and **Auto**
+appear when you turn on device sync or the Auto dashboard under Privacy.
 
 ## Options
 
@@ -67,7 +68,20 @@ Computed on your device from the active board:
   as one `.linkhaven.zip`; import a bundle as a new workspace or to replace the
   current one. See [Storage](storage.html#canvas-bundle-import-and-export).
 - **Maintenance**: **Check Links** sends a `HEAD` request to every card URL
-  and marks cards whose site does not answer within 5 seconds.
+  and marks cards whose site does not answer within 5 seconds. **Find app
+  icons** gives the cards on the board their self-hosted app icon (Jellyfin,
+  Radarr, …) where one fits; your own images stay.
+
+## Sync
+
+With **Device sync** on, this tab connects the device: create a sync or join
+one with its sync code or QR code, on the public server, your own, or a
+WebDAV folder. Once connected it shows the devices in the sync (with
+**Remove** for a lost one), **Workspaces on this device** (all, or only the
+ones you tick, e.g. on a work computer) and the code to add another device.
+See [Web app and sync](web-app-and-sync.html).
+
+![The Sync tab](assets/screenshots/12-device-sync.png)
 
 ## Privacy
 
@@ -83,6 +97,9 @@ server.
 | App icons             | Icons for self-hosted apps (Jellyfin, Radarr, …) from dashboard-icons        |
 | Charts and news feeds | Shows the chart and feed buttons; chart and feed nodes connect to their feed |
 | Link check            | Enables **Check Links** in the Data tab                                      |
+| Auto dashboard        | A workspace built from what you open most (the **Auto** tab)                 |
+| AI arrangement        | Lets the Auto dashboard ask Claude, with your own key, to group its pages    |
+| Device sync           | End-to-end encrypted sync between your devices (the **Sync** tab)            |
 
 ## Workspaces
 
