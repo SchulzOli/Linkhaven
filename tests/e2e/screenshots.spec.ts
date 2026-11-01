@@ -15,10 +15,19 @@
  *   Dev server running on http://127.0.0.1:4173 (Playwright auto-starts it)
  */
 
-import { resolve } from 'node:path'
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import type { AddressInfo } from 'node:net'
+import { tmpdir } from 'node:os'
+import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import { expect, test, type Locator, type Page } from '@playwright/test'
+
+// @ts-expect-error -- plain ESM server module without type declarations
+import {
+  createLinkhavenServer,
+  readServerConfig,
+} from '../../server/linkhaven-server.mjs'
 
 import { moveElementToPoint } from './dragHelpers'
 import { dismissVisibleEditPanels, enableNetworkFeatures } from './fixtures'
@@ -896,6 +905,312 @@ test.describe('Store listing screenshots', () => {
     await page.getByRole('tab', { name: 'Statistics' }).click()
     await expect(page.getByTestId('statistics-panel')).toBeVisible()
     await screenshot(page, '08-local-statistics')
+  })
+
+  /**
+   * Screenshot 10: Notes
+   * Shows: Two note nodes with freehand sketches and handwritten text
+   */
+  test('10 — Notes', async ({ page }) => {
+    await openMenu(page)
+    await applyTheme(page, 'Excalidraw')
+    await page.getByRole('tab', { name: 'Options' }).click()
+    await selectOption(page, 'Color mode', 'Light')
+    await closeMenu(page)
+
+    const notes = page.getByTestId(/note-node-/)
+    const drawLine = async (points: Array<[number, number]>) => {
+      await page.mouse.move(...points[0])
+      await page.mouse.down()
+
+      for (const [index, point] of points.slice(1).entries()) {
+        const [fromX, fromY] = points[index]
+
+        for (let step = 1; step <= 8; step += 1) {
+          await page.mouse.move(
+            fromX + ((point[0] - fromX) * step) / 8,
+            fromY + ((point[1] - fromY) * step) / 8,
+          )
+        }
+      }
+
+      await page.mouse.up()
+    }
+    const write = async (x: number, y: number, text: string) => {
+      await page.mouse.dblclick(x, y)
+      await page.keyboard.type(text)
+      await page.keyboard.press('Escape')
+      await page.waitForTimeout(150)
+    }
+
+    // A plan for the weekend: a list with ticks.
+    await page.getByRole('button', { name: 'Add note' }).click()
+    await expect(notes).toHaveCount(1)
+    await moveCardToPoint(page, notes.first().getByTestId(/note-toolbar/), {
+      x: 360,
+      y: 140,
+    })
+
+    let pad = (await notes.first().getByTestId('note-pad').boundingBox())!
+
+    await write(pad.x + 30, pad.y + 40, 'Weekend')
+    await drawLine([
+      [pad.x + 28, pad.y + 72],
+      [pad.x + 150, pad.y + 70],
+    ])
+    await write(pad.x + 50, pad.y + 105, 'Book tickets')
+    await write(pad.x + 50, pad.y + 145, 'Backup NAS')
+    await write(pad.x + 50, pad.y + 185, 'Call Mia')
+    await drawLine([
+      [pad.x + 26, pad.y + 106],
+      [pad.x + 32, pad.y + 114],
+      [pad.x + 42, pad.y + 96],
+    ])
+    await drawLine([
+      [pad.x + 26, pad.y + 146],
+      [pad.x + 32, pad.y + 154],
+      [pad.x + 42, pad.y + 136],
+    ])
+
+    // A quick sketch: two boxes and an arrow.
+    await page.getByRole('button', { name: 'Add note' }).click()
+    await expect(notes).toHaveCount(2)
+    await moveCardToPoint(page, notes.last().getByTestId(/note-toolbar/), {
+      x: 820,
+      y: 300,
+    })
+    pad = (await notes.last().getByTestId('note-pad').boundingBox())!
+    await drawLine([
+      [pad.x + 30, pad.y + 60],
+      [pad.x + 110, pad.y + 58],
+      [pad.x + 112, pad.y + 110],
+      [pad.x + 32, pad.y + 112],
+      [pad.x + 30, pad.y + 60],
+    ])
+    await drawLine([
+      [pad.x + 120, pad.y + 85],
+      [pad.x + 175, pad.y + 86],
+    ])
+    await drawLine([
+      [pad.x + 162, pad.y + 76],
+      [pad.x + 176, pad.y + 86],
+      [pad.x + 162, pad.y + 96],
+    ])
+    await drawLine([
+      [pad.x + 185, pad.y + 60],
+      [pad.x + 260, pad.y + 62],
+      [pad.x + 258, pad.y + 112],
+      [pad.x + 186, pad.y + 110],
+      [pad.x + 185, pad.y + 60],
+    ])
+    await write(pad.x + 45, pad.y + 150, 'App')
+    await write(pad.x + 195, pad.y + 150, 'Server')
+
+    await page.mouse.click(1180, 700)
+    await page.waitForTimeout(300)
+    await screenshot(page, '10-notes')
+  })
+
+  /**
+   * Screenshot 11: Homelab app icons
+   * Shows: A homelab group whose cards got their app icons
+   */
+  test('11 — Homelab app icons', async ({ page }) => {
+    // Real icons from jsDelivr; APP_ICONS_DIR serves them from a folder of
+    // dashboard-icons SVGs instead (offline runs).
+    const iconDir = process.env.APP_ICONS_DIR
+
+    if (iconDir) {
+      await page.route('https://cdn.jsdelivr.net/**', (route) => {
+        const file = join(iconDir, route.request().url().split('/').pop()!)
+
+        return existsSync(file)
+          ? route.fulfill({
+              contentType: 'image/svg+xml',
+              body: readFileSync(file),
+            })
+          : route.fulfill({ status: 404 })
+      })
+    }
+
+    await enableNetworkFeatures(page, { appIcons: true })
+    await page.reload()
+    await openMenu(page)
+    await applyTheme(page, 'Nord')
+    await page.getByRole('tab', { name: 'Options' }).click()
+    await selectOption(page, 'Color mode', 'Dark')
+    await closeMenu(page)
+
+    await createGroup(page)
+    const group = page.locator('article[data-testid^="card-group-"]').first()
+    await moveCardToPoint(page, group.getByTestId(/card-group-header-/), {
+      x: 230,
+      y: 170,
+    })
+    await group
+      .getByRole('button', { name: 'Update group' })
+      .click({ force: true })
+    await page.getByLabel(/Edit group name/).fill('Homelab')
+    await page.getByLabel(/Edit group width for/).fill('27')
+    await page.getByLabel(/Edit group height for/).fill('14')
+    await dismissVisibleEditPanels(page)
+
+    const body = page.getByTestId(/card-group-body-/).first()
+    const apps = [
+      ['192.168.1.20:8096', 'Jellyfin'],
+      ['192.168.1.20:7878', 'Radarr'],
+      ['192.168.1.20:8989', 'Sonarr'],
+      ['192.168.1.20:9696', 'Prowlarr'],
+      ['192.168.1.30:8123', 'Home Assistant'],
+      ['192.168.1.40:8080', 'Dozzle'],
+      ['192.168.1.40:8090', 'Beszel'],
+      ['192.168.1.40:9120', 'Komodo'],
+      ['192.168.1.50:3000', 'Open WebUI'],
+      ['ntfy.sh/homelab', 'ntfy'],
+    ] as const
+
+    const bodyBox = (await body.boundingBox())!
+
+    for (const [index, [url, title]] of apps.entries()) {
+      await createCard(page, url, title)
+
+      const card = page.getByTestId(/link-card-/).last()
+      const cardBox = (await card.boundingBox())!
+
+      // Edge to edge, like a dashboard of tiles.
+      await moveElementToPoint(
+        page,
+        card,
+        {
+          x: bodyBox.x + 24 + cardBox.width / 2 + (index % 5) * cardBox.width,
+          y:
+            bodyBox.y +
+            24 +
+            cardBox.height / 2 +
+            Math.floor(index / 5) * cardBox.height,
+        },
+        { sourcePosition: 'center', settleMs: 200 },
+      )
+      await dismissVisibleEditPanels(page)
+    }
+
+    await page.waitForFunction(
+      () =>
+        document.querySelectorAll('[data-testid="card-image"][src^="blob:"]')
+          .length >= 10,
+    )
+    await page.mouse.click(1180, 700)
+    await page.waitForTimeout(400)
+    await screenshot(page, '11-homelab-app-icons')
+  })
+
+  /**
+   * Screenshot 12: Device sync
+   * Shows: The Sync tab with three devices, the workspace choice and the
+   * sync code with its QR code
+   */
+  test('12 — Device sync', async ({ page, browser }) => {
+    test.setTimeout(120_000)
+
+    const dataDir = mkdtempSync(join(tmpdir(), 'linkhaven-shots-'))
+    const server = createLinkhavenServer({
+      ...readServerConfig({}),
+      dataDir,
+      charts: false,
+      webApp: false,
+      idleDays: 0,
+    })
+
+    await new Promise<void>((done) => server.listen(0, '127.0.0.1', done))
+
+    const localUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}`
+    // The panel shows a real-looking address; requests go to the local server.
+    const serverUrl = 'https://linkhaven.oli-tech.eu'
+    const forward = (target: Page) =>
+      target.context().route(`${serverUrl}/**`, async (route) =>
+        route.fulfill({
+          response: await route.fetch({
+            url: route.request().url().replace(serverUrl, localUrl),
+          }),
+        }),
+      )
+    const openSync = async (target: Page, name: string) => {
+      await openMenu(target)
+      const menu = target.getByRole('dialog')
+      await menu.getByRole('tab', { name: 'Privacy' }).click()
+      await target.getByLabel('Device sync').check()
+      await menu.getByRole('tab', { name: 'Sync' }).click()
+      await target.getByLabel('Sync server address').fill(serverUrl)
+      await target.getByLabel('Device name').fill(name)
+    }
+    const synced = (target: Page) =>
+      expect(target.getByTestId('sync-status')).toContainText(
+        /Synced|Up to date/,
+        { timeout: 20_000 },
+      )
+
+    try {
+      await forward(page)
+      await openSync(page, 'Laptop')
+      await page.getByTestId('sync-create').click()
+      await synced(page)
+      await page.getByTestId('sync-show-code').click()
+
+      const code = (await page.getByTestId('sync-code').textContent())!.trim()
+
+      for (const [name, chooseOnly] of [
+        ['Phone', false],
+        ['Office PC', true],
+      ] as const) {
+        const device = await (await browser.newContext()).newPage()
+
+        await forward(device)
+        await device.goto('/')
+        await openSync(device, name)
+
+        if (chooseOnly) {
+          await device.getByLabel('Only workspaces I choose').check()
+        }
+
+        await device.getByLabel('Sync code').fill(code)
+        await device.getByTestId('sync-join').click()
+        await synced(device)
+        await device.context().close()
+      }
+
+      // The joiners' empty Home came over with its default theme; style the
+      // board now and give it something to show.
+      await page.getByTestId('sync-now').click()
+      await synced(page)
+      await applyTheme(page, 'Minimal')
+      await page.getByRole('tab', { name: 'Options' }).click()
+      await selectOption(page, 'Color mode', 'Light')
+      await closeMenu(page)
+      await page.getByRole('button', { name: 'Add note' }).click()
+      const note = page.getByTestId(/note-node-/)
+      await moveCardToPoint(page, note.getByTestId(/note-toolbar/), {
+        x: 120,
+        y: 140,
+      })
+      const pad = (await note.getByTestId('note-pad').boundingBox())!
+      await page.mouse.dblclick(pad.x + 30, pad.y + 50)
+      await page.keyboard.type('Same board on every device')
+      await page.keyboard.press('Escape')
+      await page.mouse.click(1150, 640)
+
+      await openMenu(page)
+      await page.getByRole('dialog').getByRole('tab', { name: 'Sync' }).click()
+      await page.getByTestId('sync-now').click()
+      await synced(page)
+      await expect(page.getByTestId('sync-devices')).toContainText('Office PC')
+      await page.getByTestId('sync-devices').scrollIntoViewIfNeeded()
+      await page.waitForTimeout(300)
+      await screenshot(page, '12-device-sync')
+    } finally {
+      server.closeAllConnections()
+      await new Promise((done) => server.close(done))
+      rmSync(dataDir, { recursive: true, force: true })
+    }
   })
 
   /**

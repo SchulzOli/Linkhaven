@@ -31,7 +31,7 @@ Your new tab as an infinite canvas: links, groups, notes, images, live charts an
 - link dashboard
 - infinite canvas
 - workspace bookmarks
-- bookmark groups
+- homelab dashboard
 
 ---
 
@@ -49,6 +49,13 @@ All screenshots are 1280×800 PNG (accepted by Chrome Web Store, Edge Add-ons an
 - extension/screenshots/06-template-library.png — A group of five cards saved as a template with a preview thumbnail.
 - extension/screenshots/07-charts-and-news.png — Three live chart nodes, a news feed merging four sources, and link cards (Excalidraw theme, dark).
 - extension/screenshots/08-local-statistics.png — The Statistics tab: overview, link-open timeline and top cards, all local.
+- extension/screenshots/10-notes.png — Two notes: a handwritten to-do list and a quick sketch (Excalidraw theme, light).
+- extension/screenshots/11-homelab-app-icons.png — A Homelab group whose cards got their app icons: Jellyfin, Radarr, Home Assistant and more (Nord theme, dark).
+- extension/screenshots/12-device-sync.png — The Sync tab: the Linkhaven server, the workspace choice and three devices (Minimal theme, light).
+
+Screenshots 10–12 come from tests 10–12 of the same spec. For 11, `APP_ICONS_DIR=<folder of dashboard-icons SVGs>` serves the icons offline; without it they load from jsDelivr.
+
+**Which to upload where.** Chrome takes at most 5 screenshots, Edge 10, AMO any number. Order for Chrome: 01, 11, 12, 10, 07. Edge and AMO: 01, 11, 12, 10, 07, 02, 03, 04, 05, 08.
 
 ### Edge Promotional Assets
 
@@ -74,7 +81,7 @@ Drag, group, resize and style link cards on a zoomable infinite board — and pu
 Pan, zoom and navigate freely. Snap-to-grid keeps everything aligned. Multi-select, copy, paste, undo and a format painter let you work fast.
 
 **Link Cards**
-Create cards from any URL; with website icons turned on, favicons are fetched once and cached locally, otherwise a clean default image is used. Give a card an optional local address (e.g. http://192.168.1.10:8123 next to https://home.example.com) and Linkhaven opens the local one when you're at home. Resize cards from 2×2 up to 12×12 grid cells, toggle title and image, use your own images, and style each card with fill, border, corner radius, transparency and shadow.
+Create cards from any URL; with website icons turned on, favicons are fetched once and cached locally, otherwise a clean default image is used. Give a card an optional local address (e.g. http://192.168.1.10:8123 next to https://home.example.com) and Linkhaven opens the local one when you're at home. Homelab links get the real app icon: Jellyfin, Radarr, Home Assistant and 3,000 more are recognised by name, address or port. Resize cards from 2×2 up to 12×12 grid cells, toggle title and image, use your own images, and style each card with fill, border, corner radius, transparency and shadow.
 
 **Groups**
 Collect cards in collapsible groups and nest groups inside groups. Collapsing a group hides everything inside it, including charts and feeds.
@@ -107,7 +114,7 @@ Create, rename, reorder and switch between boards from the workspace rail. Expor
 See link opens, canvas opens and storage use per board — computed and kept on your device.
 
 **Device sync and web app (optional)**
-Keep your boards in step across computers and phones: create a sync, then add devices with a sync code or QR code. Everything is encrypted on your device before it leaves; the server only stores data it can't read. Lost a device? Remove it from the device list and it is locked out at once. Use the public Linkhaven server, your own, or a WebDAV folder. On phones, Linkhaven installs as a web app.
+Keep your boards in step across computers and phones: create a sync, then add devices with a sync code or QR code. Everything is encrypted on your device before it leaves; the server only stores data it can't read. Lost a device? Remove it from the device list and it is locked out at once. A work computer can sync just the workspaces you pick. Use the public Linkhaven server, host your own with one Docker container, or use a WebDAV folder. On phones, Linkhaven installs as a web app.
 
 **Privacy**
 No account. No analytics. No ads. Off by default: every feature that uses the network waits until you turn it on in Menu → Privacy.
