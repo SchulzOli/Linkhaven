@@ -34,7 +34,7 @@ Linkhaven is a local-first infinite canvas for links, notes, images, live charts
 - Six built-in themes plus saved or imported custom themes and token-level customization
 - Reusable templates with preview thumbnails and bundled local images
 - Local statistics for link opens, canvas opens, and storage footprint
-- Optional device sync, end-to-end encrypted, with a device list and per-device workspace choice; through the public server, your own, or a WebDAV folder
+- Optional device sync, end-to-end encrypted, with per-device workspace choice; through a Linkhaven server (the public one or your own: sync code, QR code, device list) or a WebDAV folder (passphrase)
 - No account and no required server: everything works offline, and every network feature is opt-in
 
 ## Feature Overview
@@ -70,7 +70,7 @@ Linkhaven is a local-first infinite canvas for links, notes, images, live charts
 
 - Turn on **Device sync** under **Menu → Privacy** to keep workspaces, themes and images in step across devices: through a Linkhaven server with a sync code (no account), or through a WebDAV folder you own (Nextcloud, a NAS, …)
 - End-to-end encrypted on the device; the server only stores data it can't read
-- Devices join with a sync code or QR code; the device list shows every device, and **Remove** locks a lost one out and rotates the keys
+- With a Linkhaven server, devices join with a sync code or QR code; the device list shows every device, and **Remove** locks a lost one out and rotates the keys. A WebDAV folder works with a passphrase on each device instead, without a device list
 - A device can sync only the workspaces you pick, e.g. a work computer that gets just your work board
 - The public server is [linkhaven.oli-tech.eu](https://linkhaven.oli-tech.eu); any device can use another server instead
 - Self-host everything (web app, sync, news feeds, charts) in one Docker container: [doc/SELF_HOSTING.md](doc/SELF_HOSTING.md)
