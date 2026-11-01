@@ -150,7 +150,7 @@ No account. No analytics. No ads. Off by default: every feature that uses the ne
 | Chrome | `store-assets/chrome-small-promotional-tile-440x280.png` | `store-assets/chrome-marquee-promotional-tile-1400x560.png` |
 | Edge   | `store-assets/edge-small-promotional-tile-440x280.png`   | `store-assets/edge-large-promotional-tile-1400x560.png`     |
 
-Store icon / logo: `icons/icon-128.png`.
+Store icon: `icons/icon-128.png` (Chrome, AMO) · Edge store logo: `icons/icon-300.png`.
 
 ### Regenerating
 
@@ -244,7 +244,7 @@ is turned off.
    Support; "Does your extension access, collect or transmit personal
    information?" → **Yes** (only the two optional features above).
 3. **Store listings (English):** Description, Short description, Search
-   terms, Store logo `icons/icon-128.png`, up to 10 screenshots, small and
+   terms, Store logo `icons/icon-300.png`, up to 10 screenshots, small and
    large promotional tiles.
 4. **Submit:** paste [Notes for certification](#notes-for-certification-edge).
    Note the **Product ID** (a GUID, in the extension overview).
