@@ -8,8 +8,9 @@ section: Guide
 # Getting started
 
 Linkhaven turns a blank tab into an infinite canvas. You place link cards,
-groups, pictures, live charts and news feeds on it and arrange them the way
-you think about them. Everything is stored in your browser.
+groups, notes, pictures, live charts and news feeds on it and arrange them
+the way you think about them. Everything is stored in your browser; an
+optional, end-to-end encrypted sync keeps your devices in step.
 
 ![The Linkhaven canvas with five groups of link cards](assets/screenshots/01-canvas-overview.png)
 
@@ -17,11 +18,11 @@ you think about them. Everything is stored in your browser.
 
 Linkhaven replaces the new tab page in Chrome, Edge and Firefox.
 
-| Browser | Store                                                                                                      |
-| ------- | ---------------------------------------------------------------------------------------------------------- |
-| Chrome  | [Chrome Web Store](https://chromewebstore.google.com/detail/linkhub/dpbgplhiaobnegcbfedihimnoamlpgmd)      |
-| Edge    | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/linkhub/gkcpbfphinbaoplepknkinjfkdhljghp) |
-| Firefox | [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/link-hub/)                                |
+| Browser | Store                                                                                                   |
+| ------- | ------------------------------------------------------------------------------------------------------- |
+| Chrome  | [Chrome Web Store](https://chromewebstore.google.com/detail/linkhaven/glcnmoihjckagobgpimgemnibhanlegp) |
+| Edge    | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/search/linkhaven)                             |
+| Firefox | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/linkhaven/)                                  |
 
 After the install, open a new tab. The extension asks for no permissions and
 loads no remote code.
@@ -29,7 +30,10 @@ loads no remote code.
 ## Use it as an app on phone, tablet or PC
 
 Linkhaven also runs as an installable web app (PWA):
+[linkhaven.oli-tech.eu](https://linkhaven.oli-tech.eu), which also hosts the
+public sync server, or
 [schulzoli.github.io/Linkhaven/app/](https://schulzoli.github.io/Linkhaven/app/).
+To run it on your own server, see [Self-hosting](../SELF_HOSTING.md).
 
 - **Android (Chrome):** open the link, then menu → _Install app_.
 - **iPhone and iPad (Safari):** open the link, then Share → _Add to Home

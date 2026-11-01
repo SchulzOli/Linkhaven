@@ -1224,8 +1224,10 @@ test.describe('Store listing screenshots', () => {
         width: 1400,
         height: 560,
         files: [
-          'chrome-marquee-promotional-tile-1400x560',
-          'edge-large-promotional-tile-1400x560',
+          'extension/store-assets/chrome-marquee-promotional-tile-1400x560',
+          'extension/store-assets/edge-large-promotional-tile-1400x560',
+          // The README banner.
+          '.github/assets/linkhaven-banner',
         ],
       },
       {
@@ -1233,9 +1235,16 @@ test.describe('Store listing screenshots', () => {
         width: 440,
         height: 280,
         files: [
-          'chrome-small-promotional-tile-440x280',
-          'edge-small-promotional-tile-440x280',
+          'extension/store-assets/chrome-small-promotional-tile-440x280',
+          'extension/store-assets/edge-small-promotional-tile-440x280',
         ],
+      },
+      {
+        // GitHub → Settings → Social preview.
+        size: 'social',
+        width: 1280,
+        height: 640,
+        files: ['.github/assets/social-preview-1280x640'],
       },
     ] as const
     const source = pathToFileURL(
@@ -1254,7 +1263,7 @@ test.describe('Store listing screenshots', () => {
 
       for (const file of tile.files) {
         await page.screenshot({
-          path: `extension/store-assets/${file}.png`,
+          path: `${file}.png`,
           clip: { x: 0, y: 0, width: tile.width, height: tile.height },
         })
       }

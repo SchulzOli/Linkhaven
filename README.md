@@ -1,13 +1,25 @@
 # Linkhaven
 
+![Linkhaven: links, notes, charts and news on one infinite board](.github/assets/linkhaven-banner.png)
+
 [![CI](https://github.com/SchulzOli/Linkhaven/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SchulzOli/Linkhaven/actions/workflows/ci.yml)
 [![Release](https://github.com/SchulzOli/Linkhaven/actions/workflows/release.yml/badge.svg)](https://github.com/SchulzOli/Linkhaven/actions/workflows/release.yml)
 [![Docs](https://github.com/SchulzOli/Linkhaven/actions/workflows/pages.yml/badge.svg?branch=main)](https://schulzoli.github.io/Linkhaven/)
-[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/linkhub/dpbgplhiaobnegcbfedihimnoamlpgmd)
-[![Edge Add-ons](https://img.shields.io/badge/Edge-Add--ons-0A7FEA?style=for-the-badge&logo=microsoftedge&logoColor=white)](https://microsoftedge.microsoft.com/addons/detail/linkhub/gkcpbfphinbaoplepknkinjfkdhljghp)
-[![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/link-hub/)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/linkhaven/glcnmoihjckagobgpimgemnibhanlegp)
+[![Edge Add-ons](https://img.shields.io/badge/Edge-Add--ons-0A7FEA?style=for-the-badge&logo=microsoftedge&logoColor=white)](https://microsoftedge.microsoft.com/addons/search/linkhaven)
+[![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/firefox/addon/linkhaven/)
 
-Linkhaven is a local-first infinite canvas for bookmarks, images, live charts, news feeds, themes, and reusable layouts. It turns a blank tab into a spatial board where every link has a place, and the same React app powers both the hosted web build and the browser-extension new-tab experience for Chrome, Edge, and Firefox.
+Linkhaven is a local-first infinite canvas for links, notes, images, live charts and news feeds. It turns a blank tab into a spatial board where every link has a place. The same React app runs as the new tab page in Chrome, Edge and Firefox and as an installable web app on phones, tablets and computers, and an optional, end-to-end encrypted sync keeps them in step.
+
+## Get Linkhaven
+
+|                                          |                                                                                                                                           |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **Chrome**                               | [Chrome Web Store](https://chromewebstore.google.com/detail/linkhaven/glcnmoihjckagobgpimgemnibhanlegp)                                   |
+| **Edge**                                 | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/search/linkhaven)                                                               |
+| **Firefox**                              | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/linkhaven/)                                                                    |
+| **Web app** (all devices, works offline) | [linkhaven.oli-tech.eu](https://linkhaven.oli-tech.eu) or [schulzoli.github.io/Linkhaven/app](https://schulzoli.github.io/Linkhaven/app/) |
+| **Your own server**                      | one Docker container: [doc/SELF_HOSTING.md](doc/SELF_HOSTING.md)                                                                          |
 
 **Documentation:** [schulzoli.github.io/Linkhaven](https://schulzoli.github.io/Linkhaven/)
 
@@ -16,12 +28,14 @@ Linkhaven is a local-first infinite canvas for bookmarks, images, live charts, n
 ## Why Linkhaven
 
 - Infinite canvas with pan, zoom, snap-to-grid placement, marquee multi-select, copy/cut/paste, undo, and format painter
-- Link cards, collapsible nested groups, pictures, live charts, and RSS/Atom news feeds on the same board
+- Link cards, collapsible nested groups, notes, pictures, live charts, and RSS/Atom news feeds on the same board
+- Homelab links get their real app icon (Jellyfin, Radarr, Home Assistant and 3,000 more) and can open a local address when you're at home
 - Multiple workspaces with a pinned or auto-hiding workspace rail
 - Six built-in themes plus saved or imported custom themes and token-level customization
 - Reusable templates with preview thumbnails and bundled local images
 - Local statistics for link opens, canvas opens, and storage footprint
-- No account, mandatory backend, or remote sync requirement
+- Optional device sync, end-to-end encrypted, with a device list and per-device workspace choice; through the public server, your own, or a WebDAV folder
+- No account and no required server: everything works offline, and every network feature is opt-in
 
 ## Feature Overview
 
@@ -32,10 +46,12 @@ Linkhaven is a local-first infinite canvas for bookmarks, images, live charts, n
 - Marquee select across cards, groups, and picture nodes
 - Copy, cut, paste, duplicate, and undo workspace edits
 - Keyboard shortcuts and an in-app help panel for fast editing
+- Touch: pan with one finger, pinch to zoom, double-tap to zoom in
 
 ### Content and organization
 
-- Create link cards from URLs; website icons load on request (Menu → Privacy), otherwise cards show a letter or your own image
+- Create link cards from URLs; website icons load on request (Menu → Privacy), otherwise cards show a default picture or your own image
+- App icons (Menu → Privacy): homelab cards are matched to one of ~3,450 self-hosted apps from [dashboard-icons](https://github.com/homarr-labs/dashboard-icons) by name, address or default port; **Data → Find app icons** updates existing cards
 - Give a card an optional local link (e.g. `http://192.168.1.10:8123` next to `https://home.example.com`): a click opens it when it answers, otherwise the main link
 - Resize cards from 2x2 up to 12x12 grid cells
 - Override favicons with uploaded gallery images
@@ -54,6 +70,9 @@ Linkhaven is a local-first infinite canvas for bookmarks, images, live charts, n
 
 - Turn on **Device sync** under **Menu → Privacy** to keep workspaces, themes and images in step across devices: through a Linkhaven server with a sync code (no account), or through a WebDAV folder you own (Nextcloud, a NAS, …)
 - End-to-end encrypted on the device; the server only stores data it can't read
+- Devices join with a sync code or QR code; the device list shows every device, and **Remove** locks a lost one out and rotates the keys
+- A device can sync only the workspaces you pick, e.g. a work computer that gets just your work board
+- The public server is [linkhaven.oli-tech.eu](https://linkhaven.oli-tech.eu); any device can use another server instead
 - Self-host everything (web app, sync, news feeds, charts) in one Docker container: [doc/SELF_HOSTING.md](doc/SELF_HOSTING.md)
 - Besides the browser extension, Linkhaven installs as a web app (PWA) on phones, tablets and computers and works offline: [schulzoli.github.io/Linkhaven/app/](https://schulzoli.github.io/Linkhaven/app/); see [doc/APP.md](doc/APP.md)
 
@@ -108,6 +127,18 @@ Linkhaven is a local-first infinite canvas for bookmarks, images, live charts, n
 ### Local statistics
 
 ![Linkhaven local statistics](extension/screenshots/08-local-statistics.png)
+
+### Notes
+
+![Linkhaven notes](extension/screenshots/10-notes.png)
+
+### Homelab app icons
+
+![Linkhaven homelab app icons](extension/screenshots/11-homelab-app-icons.png)
+
+### Device sync
+
+![Linkhaven device sync](extension/screenshots/12-device-sync.png)
 
 ## Quick Start
 
@@ -191,7 +222,7 @@ To release, run **Actions → Release** with the new version and the stores to p
 npm run server   # device sync, news feed proxy and chart feed on http://127.0.0.1:8790
 ```
 
-The same server runs locally or as the public sync service (Docker + automatic HTTPS); see [doc/SERVER.md](doc/SERVER.md).
+The same server runs locally or as the public sync service at [linkhaven.oli-tech.eu](https://linkhaven.oli-tech.eu) (Docker image `ghcr.io/schulzoli/linkhaven`, automatic HTTPS, daily backups and updates); see [doc/SERVER.md](doc/SERVER.md).
 
 ### Self-hosting
 
@@ -227,7 +258,7 @@ Linkhaven is local-first.
 - News feed nodes load the feeds you add through the feed proxy set on the node (by default the optional local proxy on `127.0.0.1`), or directly when the proxy is cleared; article images load from the news sites (can be turned off per node)
 - **Check Links** in the Data tab sends a `HEAD` request to each link card's URL, only when you start it
 - **Device sync** talks only to the sync server or WebDAV folder you choose, and encrypts everything on the device first
-- No account, remote sync requirement, or third-party analytics or behavioral tracking is built into the app
+- No account, no required server, and no analytics or behavioral tracking
 
 For deeper persistence details, see [doc/STORAGE.md](doc/STORAGE.md). The privacy policy is published at [schulzoli.github.io/Linkhaven/privacy/](https://schulzoli.github.io/Linkhaven/privacy/) and ships in the app at [public/privacy/index.html](public/privacy/index.html).
 
@@ -242,7 +273,7 @@ For deeper persistence details, see [doc/STORAGE.md](doc/STORAGE.md). The privac
 - [doc/NEWS_FEED.md](doc/NEWS_FEED.md) for news feed nodes and the feed proxy
 - [doc/CANVAS_ENGINE.md](doc/CANVAS_ENGINE.md) for the canvas engine and optional card effects
 - [extension/EXTENSION.md](extension/EXTENSION.md) for extension packaging and release workflow
-- [extension/STORE_LISTING.md](extension/STORE_LISTING.md) for store-copy and reviewer notes
+- [extension/STORE_LISTING.md](extension/STORE_LISTING.md) for the store listings: texts, images, permission justifications and reviewer notes
 - [public/privacy/index.html](public/privacy/index.html) for the standalone privacy page
 - [CONTRIBUTING.md](CONTRIBUTING.md) for contribution workflow
 

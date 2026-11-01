@@ -6,7 +6,8 @@
     <!--
       Source of the store promotional tiles. Rendered by
       tests/e2e/screenshots.spec.ts ("09 — Promotional tiles") at the exact
-      store sizes: ?size=large (1400x560) or ?size=small (440x280).
+      store sizes: ?size=large (1400x560) or ?size=small (440x280), and
+      ?size=social (1280x640) for the GitHub social preview.
     -->
     <style>
       @font-face {
@@ -206,6 +207,48 @@
         transform: rotate(-2deg);
       }
 
+      /* ── 1280 x 640 (GitHub social preview; builds on .large) ── */
+      .large.social {
+        width: 1280px;
+        height: 640px;
+      }
+
+      .social .copy {
+        left: 64px;
+        width: 480px;
+      }
+
+      .social .name {
+        font-size: 52px;
+      }
+
+      .social .headline {
+        font-size: 32px;
+      }
+
+      .social .chips {
+        gap: 8px;
+      }
+
+      .social .chip {
+        padding: 8px 13px;
+        font-size: 14px;
+      }
+
+      .social .shot-main {
+        top: 96px;
+        left: 568px;
+        width: 672px;
+        height: 420px;
+      }
+
+      .social .shot-side {
+        top: 352px;
+        left: 872px;
+        width: 360px;
+        height: 225px;
+      }
+
       /* ── 440 x 280 (Chrome small, Edge small) ──────────────── */
       .small {
         width: 440px;
@@ -270,26 +313,29 @@
         </div>
         <p class="eyebrow">Your new tab, as a canvas</p>
         <p class="headline">
-          Links, groups, charts and news on one infinite board.
+          Links, notes, charts and news on one infinite board.
         </p>
         <div class="chips">
           <span class="chip">Local-first</span>
-          <span class="chip">Live charts</span>
-          <span class="chip">RSS feeds</span>
-          <span class="chip">Templates</span>
+          <span class="chip">Notes</span>
+          <span class="chip">Encrypted sync</span>
+          <span class="chip">Self-hostable</span>
         </div>
       </div>
       <div class="shot shot-main">
         <img alt="" src="../screenshots/01-canvas-overview.png" />
       </div>
       <div class="shot shot-side">
-        <img alt="" src="../screenshots/07-charts-and-news.png" />
+        <img alt="" src="../screenshots/11-homelab-app-icons.png" />
       </div>
     </div>
     <script>
       const size = new URLSearchParams(location.search).get('size') ?? 'large'
 
-      document.getElementById('tile').classList.add(size)
+      // The social preview reuses the large layout with its own sizes.
+      document
+        .getElementById('tile')
+        .classList.add(...(size === 'social' ? ['large', 'social'] : [size]))
     </script>
   </body>
 </html>
