@@ -458,7 +458,7 @@ writeCiEnvFile(
   [
     ['JWT_ISSUER', process.env.FIREFOX_JWT_ISSUER],
     ['JWT_SECRET', process.env.FIREFOX_JWT_SECRET],
-    ['EXT_ID', process.env.FIREFOX_EXT_ID || 'linkhaven'],
+    ['EXT_ID', process.env.FIREFOX_EXT_ID || 'linkhub'],
     ['ZIP', 'dist-extension.zip'],
     ['ZIP_SOURCE', 'linkhaven-source.zip'],
   ],

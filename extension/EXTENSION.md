@@ -130,7 +130,7 @@ Current Gecko ID:
 ```json
 "browser_specific_settings": {
   "gecko": {
-    "id": "linkhaven@oli-tech.eu"
+    "id": "linkhub@extension"
   }
 }
 ```
