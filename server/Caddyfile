@@ -1,5 +1,15 @@
 {$LINKHAVEN_DOMAIN} {
-	encode gzip
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+
 	# No access logs: the server never records who synced what.
 	reverse_proxy linkhaven:8790
 }

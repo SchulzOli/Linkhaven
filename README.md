@@ -198,7 +198,8 @@ The same server runs locally or as the public sync service (Docker + automatic H
 One container serves the web app together with sync, the news feed proxy and charts; opened from there, the app uses it without any setup:
 
 ```bash
-LINKHAVEN_DOMAIN=links.example.com SELF_HOSTED=on docker compose -f server/docker-compose.yml up -d --build
+curl -fsSL https://raw.githubusercontent.com/SchulzOli/Linkhaven/main/server/deploy/install.sh \
+  | sudo bash -s -- links.example.com
 ```
 
 At home without a domain, with Tailscale or your own reverse proxy: see [doc/SELF_HOSTING.md](doc/SELF_HOSTING.md).

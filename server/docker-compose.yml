@@ -1,19 +1,25 @@
-# Linkhaven server behind Caddy, which gets and renews the HTTPS
-# certificate automatically. See doc/SERVER.md.
+# Linkhaven in production: the ready-built image, behind Caddy, which gets
+# and renews the HTTPS certificate. See doc/SERVER.md.
 #
-# The public sync server (sync only):
-#   LINKHAVEN_DOMAIN=sync.example.com docker compose -f server/docker-compose.yml up -d
+# Settings live in .env next to this file (server/deploy/install.sh writes
+# it), for example:
 #
-# Self-hosted with everything (web app, sync, news feeds, charts):
-#   LINKHAVEN_DOMAIN=links.example.com SELF_HOSTED=on docker compose -f server/docker-compose.yml up -d
+#   LINKHAVEN_DOMAIN=linkhaven.example.com
+#   SELF_HOSTED=on            # web app, news feed proxy and charts too
+#   COMPOSE_PROFILES=caddy    # leave empty behind your own reverse proxy
+#
+#   docker compose up -d
+#
+# To build the image from this checkout instead of pulling it, add
+# -f docker-compose.build.yml (see that file).
 services:
   linkhaven:
-    build:
-      context: ..
-      dockerfile: server/Dockerfile
+    image: ghcr.io/schulzoli/linkhaven:${LINKHAVEN_VERSION:-latest}
     restart: unless-stopped
+    init: true
+    stop_grace_period: 15s
     environment:
-      TRUST_PROXY: 'on'
+      TRUST_PROXY: ${TRUST_PROXY:-on}
       # The public instance: sync only. SELF_HOSTED=on turns on the web app,
       # the news feed proxy and the chart feed too (or set each one).
       WEB_APP: ${WEB_APP:-${SELF_HOSTED:-off}}
@@ -22,23 +28,36 @@ services:
       SYNC_MAX_VAULT_MB: ${SYNC_MAX_VAULT_MB:-100}
       SYNC_IDLE_DAYS: ${SYNC_IDLE_DAYS:-365}
       LINKHAVEN_ALLOWED_ORIGINS: ${LINKHAVEN_ALLOWED_ORIGINS:-}
+    # Only this machine: Caddy (or your own reverse proxy) is the way in.
+    ports:
+      - '127.0.0.1:${LINKHAVEN_PORT:-8790}:8790'
     volumes:
       - linkhaven-data:/data
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
 
   caddy:
     image: caddy:2-alpine
+    profiles: [caddy]
     restart: unless-stopped
     ports:
       - '80:80'
       - '443:443'
+      - '443:443/udp' # HTTP/3
     environment:
-      LINKHAVEN_DOMAIN: ${LINKHAVEN_DOMAIN:?Set LINKHAVEN_DOMAIN, e.g. sync.example.com}
+      LINKHAVEN_DOMAIN: ${LINKHAVEN_DOMAIN:-}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
+      - caddy-config:/config
     depends_on:
       - linkhaven
+    logging: *logging
 
 volumes:
   linkhaven-data:
   caddy-data:
+  caddy-config:

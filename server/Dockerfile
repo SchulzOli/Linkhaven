@@ -1,8 +1,10 @@
 # The Linkhaven server: web app, device sync, news feed proxy and chart feed.
 # Build from the repository root:  docker build -f server/Dockerfile .
+# Ready-built: ghcr.io/schulzoli/linkhaven (see .github/workflows/docker.yml)
 
-# 1. The web app (PWA build), served by the server for self-hosting.
-FROM node:22-alpine AS web
+# 1. The web app (PWA build), served by the server for self-hosting. It is
+#    the same for every platform, so it builds natively, once.
+FROM --platform=$BUILDPLATFORM node:22-alpine AS web
 WORKDIR /src
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 COPY package.json package-lock.json ./
@@ -12,6 +14,11 @@ RUN npx vite build --mode pwa --outDir /web
 
 # 2. The server.
 FROM node:22-alpine
+
+LABEL org.opencontainers.image.title="Linkhaven" \
+      org.opencontainers.image.description="Linkhaven server: web app, end-to-end encrypted device sync, news feed proxy and chart feed" \
+      org.opencontainers.image.source="https://github.com/SchulzOli/Linkhaven" \
+      org.opencontainers.image.licenses="MIT"
 
 WORKDIR /app
 COPY server/package.json server/package-lock.json ./

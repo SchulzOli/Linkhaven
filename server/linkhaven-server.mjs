@@ -211,4 +211,14 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
       console.log(`  · ${part}`)
     }
   })
+
+  // `docker stop`: finish the requests in flight, then exit.
+  const shutdown = () => {
+    server.close(() => process.exit(0))
+    server.closeIdleConnections()
+    setTimeout(() => process.exit(0), 8000).unref()
+  }
+
+  process.once('SIGTERM', shutdown)
+  process.once('SIGINT', shutdown)
 }

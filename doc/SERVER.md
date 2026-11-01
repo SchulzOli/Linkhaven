@@ -31,31 +31,52 @@ work as before.
 To run the web app from the same server, with sync, feeds and charts, see
 [SELF_HOSTING.md](SELF_HOSTING.md).
 
-## Run the public instance
+## Run it on a server
 
-Requirements: a small Linux server (e.g. 1 vCPU, 1 GB RAM), Docker with the
-Compose plugin, and a domain name whose DNS points at the server (an `A`
-record such as `sync.example.com`).
+Requirements: a small Linux server (Debian or Ubuntu; 1 vCPU and 1 GB RAM
+are plenty, e.g. a Hetzner CX22), and a DNS name pointing at it (an `A`
+record, plus `AAAA` for IPv6). Ports 80 and 443 must be open.
 
 ```bash
-git clone https://github.com/SchulzOli/Linkhaven.git
-cd Linkhaven
-LINKHAVEN_DOMAIN=sync.example.com docker compose -f server/docker-compose.yml up -d --build
+curl -fsSL https://raw.githubusercontent.com/SchulzOli/Linkhaven/main/server/deploy/install.sh \
+  | sudo bash -s -- linkhaven.example.com
 ```
 
-[Caddy](https://caddyserver.com) gets and renews the HTTPS certificate
-automatically. The public setup runs **sync only**; set `NEWS_PROXY=on`
-and/or `CHARTS=on` to offer those too (every user's feeds and charts then
-go through your server).
+The script installs Docker when missing, puts everything into
+`/opt/linkhaven` (compose file, Caddyfile, `.env`, scripts, backups) and
+starts the ready-built image `ghcr.io/schulzoli/linkhaven`, which the
+[Docker image workflow](../.github/workflows/docker.yml) publishes after
+every green CI run on `main`. [Caddy](https://caddyserver.com) gets and
+renews the HTTPS certificate, serves HTTP/3 and adds security headers.
 
-Updates: `git pull` and the same `docker compose … up -d --build` again.
-Vaults live in the `linkhaven-data` Docker volume; back it up like any
-volume. Everything in it is encrypted, so a backup holds nothing readable.
+`.env` starts with `SELF_HOSTED=on`: the web app, the news feed proxy and
+the chart feed run besides sync. For a sync-only server, set it to `off`
+and run `docker compose up -d` in `/opt/linkhaven`.
+
+**Already a web server on the machine?** When ports 80/443 are taken, the
+script doesn't start Caddy (`COMPOSE_PROFILES=` stays empty) and tells you
+to point your reverse proxy at `http://127.0.0.1:8790`; keep the `Host`
+header and allow WebSockets on `/feed`. Caddy example:
+`linkhaven.example.com { reverse_proxy 127.0.0.1:8790 }`.
+
+**Operations** (in `/opt/linkhaven`; the script schedules both daily in
+`/etc/cron.d/linkhaven`):
+
+| Command                  | What it does                                                           |
+| ------------------------ | ---------------------------------------------------------------------- |
+| `./update.sh`            | Pulls the newest image and restarts when it changed                    |
+| `./backup.sh`            | Saves all vaults to `backups/` (kept 14 days; everything is encrypted) |
+| `./restore.sh <file>`    | Replaces the data with a backup                                        |
+| `docker compose logs -f` | Server and Caddy output (no access logs are written)                   |
+
+Pin or roll back a version with `LINKHAVEN_VERSION=sha-<commit>` in
+`.env`. To build from source instead of pulling, use
+`docker-compose.build.yml` (see the file).
 
 ### Make it the app's default
 
 Set the repository variable **SYNC_SERVER_URL** (Settings → Secrets and
-variables → Actions → Variables) to `https://sync.example.com`. The web app
+variables → Actions → Variables) to `https://linkhaven.example.com`. The web app
 and the next extension release then offer it in the Sync tab; users can
 still enter another server.
 

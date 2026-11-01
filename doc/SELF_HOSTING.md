@@ -22,20 +22,16 @@ too: choose **Self-hosted** in the Sync tab and enter its address.
 ## With a domain (recommended)
 
 Point a DNS name at the server (an `A` record such as `links.example.com`)
-and open ports 80 and 443. Then:
+and open ports 80 and 443. Then, on the server:
 
 ```bash
-git clone https://github.com/SchulzOli/Linkhaven.git
-cd Linkhaven
-printf 'LINKHAVEN_DOMAIN=links.example.com\nSELF_HOSTED=on\n' > server/.env
-docker compose -f server/docker-compose.yml up -d --build
+curl -fsSL https://raw.githubusercontent.com/SchulzOli/Linkhaven/main/server/deploy/install.sh \
+  | sudo bash -s -- links.example.com
 ```
 
-`server/.env` keeps your settings for later updates; any variable from the
-table below can go there too.
-
-[Caddy](https://caddyserver.com) gets and renews the certificate. Open
-`https://links.example.com`, install the app (see
+[Caddy](https://caddyserver.com) gets and renews the certificate; daily
+backups and updates are scheduled (see [SERVER.md](SERVER.md#run-it-on-a-server)).
+Open `https://links.example.com`, install the app (see
 [Web app and sync](APP.md)), and turn on **Device sync** under Menu →
 Privacy. That's it.
 
@@ -87,9 +83,12 @@ matter at home:
 ## Updates and backups
 
 ```bash
-git pull
-docker compose -f server/docker-compose.yml up -d --build   # or .local.yml
+/opt/linkhaven/update.sh       # with install.sh; it also runs daily
+/opt/linkhaven/backup.sh       # daily too; ./restore.sh <file> puts one back
 ```
+
+The home setup (`docker-compose.local.yml`) updates with `git pull` and
+`docker compose -f server/docker-compose.local.yml up -d --build`.
 
 Synced data lives in the `linkhaven-data` Docker volume. It is encrypted
 on the devices, so a backup of the volume holds nothing readable; to
