@@ -69,10 +69,25 @@ test('the taskbar shows the sync status and syncs on a click', async ({
   await expect(button).toHaveAttribute('data-state', 'offline')
   await expect(button).toBeDisabled()
 
-  // Back online: syncs by itself and is clickable again.
+  // Back online: syncs by itself (a request reaches the server) and is
+  // clickable again.
+  // Within 2 s: the sync after a change only follows 8 s later, so a
+  // request this soon comes from the action itself.
+  const syncRequest = () =>
+    page.waitForRequest(
+      (request) => request.url().startsWith(`${serverUrl}/sync/v1/vaults/`),
+      { timeout: 2000 },
+    )
+  let request = syncRequest()
+
   await context.setOffline(false)
+  await request
   await expect(button).toHaveAttribute('data-state', 'synced')
+
+  // A click syncs now.
+  request = syncRequest()
   await button.click()
+  await request
   await expect(button).toHaveAttribute('data-state', 'synced', {
     timeout: 20000,
   })
