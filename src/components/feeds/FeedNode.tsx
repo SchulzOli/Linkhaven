@@ -26,6 +26,7 @@ import {
 } from '../../features/feeds/feedItems'
 import { hostOf, type FeedItem } from '../../features/feeds/feedParser'
 import { useFeedItems } from '../../features/feeds/useFeedItems'
+import { resolveFeedProxyUrl } from '../../features/selfHost/hostServer'
 import { useNetworkFeaturesStore } from '../../state/useNetworkFeaturesStore'
 import {
   useWorkspaceStore,
@@ -125,7 +126,7 @@ export const FeedNode = memo(function FeedNode({
 
   const state = useFeedItems({
     sources: feed.sources,
-    proxyUrl: feed.proxyUrl,
+    proxyUrl: resolveFeedProxyUrl(feed.proxyUrl),
     refreshMinutes: settings.refreshMinutes,
     reloadToken,
     enabled: chartsAndFeeds,

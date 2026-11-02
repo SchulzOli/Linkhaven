@@ -254,8 +254,8 @@ Linkhaven is local-first.
 - Every feature that uses the network or reads browser data is off by default and has its own switch with live status under **Menu → Privacy**: website icons, Google favicons, app icons, chart and news feed nodes, Check Links, the Auto dashboard and its AI arrangement, and device sync
 - With **Website icons** on, creating a link card fetches the site's `/favicon.ico` once and caches it locally; with **Google favicons** on, Google's public favicon service is the fallback (never asked about local addresses)
 - With **App icons** on, homelab cards (Jellyfin, Radarr, Home Assistant, …) are matched to an app by name, address or default port on the device, and only that icon is loaded from the [dashboard-icons](https://github.com/homarr-labs/dashboard-icons) collection on jsDelivr; **Data → Find app icons** does the same for existing cards
-- Chart nodes connect only to the feed server URL set on the node (by default the optional local server on `127.0.0.1`)
-- News feed nodes load the feeds you add through the feed proxy set on the node (by default the optional local proxy on `127.0.0.1`), or directly when the proxy is cleared; article images load from the news sites (can be turned off per node)
+- Chart nodes connect only to the feed server URL set on the node (by default the Linkhaven server: the one the web app came from, or the public server)
+- News feed nodes load the feeds you add through the feed proxy set on the node (by default the Linkhaven server as well), or directly when the proxy is cleared; article images load from the news sites (can be turned off per node)
 - **Check Links** in the Data tab sends a `HEAD` request to each link card's URL, only when you start it
 - **Device sync** talks only to the sync server or WebDAV folder you choose, and encrypts everything on the device first
 - No account, no required server, and no analytics or behavioral tracking

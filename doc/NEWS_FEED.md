@@ -15,6 +15,12 @@ npm run dev
    `https://www.tagesschau.de/xml/rss2/`, and select **Add feed**.
 3. To add more feeds, open the feed options (slider icon) and go to **Feeds**.
 
+New feed nodes use the feed proxy of the Linkhaven server: the one the web app
+came from, or the public server (`https://linkhaven.oli-tech.eu/rss`) in the
+published app and extension. Without either, as in a local `npm run dev`, they
+use the local proxy from the command above; nodes that still have that local
+address use the Linkhaven server too when one is known.
+
 You can also enter a web page URL. If the page links to its feed
 (`<link rel="alternate" type="application/rss+xml">`), the node uses that
 feed. If the page has no such link, the node shows an error. Then enter the

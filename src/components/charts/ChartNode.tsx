@@ -35,6 +35,7 @@ import {
 } from '../../features/charts/chartSeries'
 import { searchChartSymbols } from '../../features/charts/chartSymbolSearch'
 import { useChartFeed } from '../../features/charts/useChartFeed'
+import { resolveChartFeedUrl } from '../../features/selfHost/hostServer'
 import { useNetworkFeaturesStore } from '../../state/useNetworkFeaturesStore'
 import {
   useWorkspaceStore,
@@ -137,8 +138,10 @@ export const ChartNode = memo(function ChartNode({
     (key) => chart.settings[key] !== undefined,
   )
 
+  // The old local placeholder points at the app's server instead.
+  const feedUrl = resolveChartFeedUrl(chart.source.url)
   const feed = useChartFeed({
-    url: chart.source.url,
+    url: feedUrl,
     symbol: chart.source.symbol,
     range: settings.range,
     live: settings.live,
@@ -271,7 +274,7 @@ export const ChartNode = memo(function ChartNode({
                 {feed.error ??
                   (feed.status === 'open' || feed.status === 'connecting'
                     ? 'Loading data…'
-                    : `No connection to ${chart.source.url}`)}
+                    : `No connection to ${feedUrl}`)}
               </p>
               <ChartSymbolSuggestions
                 onPick={(symbol) =>
@@ -409,7 +412,11 @@ function ChartSourceForm(props: {
 
     const controller = new AbortController()
     const timer = setTimeout(() => {
-      searchChartSymbols(trimmedUrl, searchQuery, controller.signal)
+      searchChartSymbols(
+        resolveChartFeedUrl(trimmedUrl),
+        searchQuery,
+        controller.signal,
+      )
         .then(setResults)
         .catch(() => setResults([]))
     }, 300)
