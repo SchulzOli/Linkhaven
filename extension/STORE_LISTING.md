@@ -212,16 +212,16 @@ is turned off.
 
 ### Network requests, all off by default
 
-| Feature (Menu → Privacy)        | Contacts                                                                                                |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Website icons                   | `https://<site>/favicon.ico` of new cards, cached locally                                               |
-| Google favicons                 | `https://www.google.com/s2/favicons` (never for local addresses)                                        |
-| App icons                       | `https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/…`, one icon per matching card, cached locally |
-| Charts and news feeds           | The feed server and feed proxy set on each node (default: the user's own computer)                      |
-| Link check                      | One `HEAD` request per card, when the user starts it                                                    |
-| Auto dashboard / AI arrangement | Browser history and top sites on the device / `https://api.anthropic.com`                               |
-| Device sync                     | The sync server or WebDAV folder the user enters                                                        |
-| Local links                     | On click only, the card's local address, to see whether it answers                                      |
+| Feature (Menu → Privacy)        | Contacts                                                                                                       |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Website icons                   | `https://<site>/favicon.ico` of new cards, cached locally                                                      |
+| Google favicons                 | `https://www.google.com/s2/favicons` (never for local addresses)                                               |
+| App icons                       | `https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/…`, one icon per matching card, cached locally        |
+| Charts and news feeds           | The feed server and feed proxy set on each node (default: the Linkhaven server, https://linkhaven.oli-tech.eu) |
+| Link check                      | One `HEAD` request per card, when the user starts it                                                           |
+| Auto dashboard / AI arrangement | Browser history and top sites on the device / `https://api.anthropic.com`                                      |
+| Device sync                     | The sync server or WebDAV folder the user enters                                                               |
+| Local links                     | On click only, the card's local address, to see whether it answers                                             |
 
 ---
 
@@ -312,8 +312,8 @@ Out of the box the extension makes no network requests and needs no server. Ever
 
 - Website icons: when the user creates a link card, the extension loads `https://<site>/favicon.ico` and caches the icon locally. With "Google favicons" also on, it falls back to Google's public favicon service (never for local addresses). With both off, cards show a default picture or an image the user uploaded.
 - App icons: a card whose title or address matches a self-hosted app (Jellyfin, Radarr, …) gets that app's icon, matched on the device against a bundled list of names; only that icon is loaded from https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons and cached locally.
-- Chart nodes (user-added): connect to the WebSocket or SSE feed URL set on the node (default `ws://127.0.0.1:8787/feed`, a server the user runs locally).
-- News feed nodes (user-added): load the RSS/Atom URLs the user enters, through the feed proxy set on the node (default `http://127.0.0.1:8788/rss`, also local) or directly. Article images load from the news sites when "Images" is on.
+- Chart nodes (user-added): connect to the WebSocket or SSE feed URL set on the node (default `wss://linkhaven.oli-tech.eu/feed`, the developer's open-source Linkhaven server; it receives only the symbol and time range).
+- News feed nodes (user-added): load the RSS/Atom URLs the user enters, through the feed proxy set on the node (default `https://linkhaven.oli-tech.eu/rss`, the same server; it fetches the feed and keeps no record) or directly. Article images load from the news sites when "Images" is on.
 - Check Links (user-triggered): one `HEAD` request per link card URL.
 - Local links (only on cards with a second, local address): on click, one request to that local address to see whether it answers (up to ~0.9 s).
 - Auto dashboard: builds a workspace from the pages the user opens most. Reads top sites and history only after the user turns on that source and grants the optional `topSites` / `history` permission; processed locally. With "AI arrangement" also on and the user's own Anthropic API key, titles and URLs of the candidate pages are sent to https://api.anthropic.com to group them.

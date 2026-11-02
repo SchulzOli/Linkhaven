@@ -27,8 +27,8 @@ With the default settings Linkhaven makes none: every request below belongs to a
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | You create a link card           | Only with **Website icons** on: the site's `/favicon.ico`; with **Google favicons** also on, Google's favicon service as a fallback (never for local addresses) |
 | You create a homelab link card   | Only with **App icons** on, when the card's name or address matches an app: that one icon from `cdn.jsdelivr.net` (dashboard-icons)                             |
-| A chart node is on the board     | The feed server set on the chart (default: your own computer, `127.0.0.1:8787`)                                                                                 |
-| A news feed node is on the board | The feeds you added, through the proxy set on the node (default: `127.0.0.1:8788`) or directly; with **Images** on, article images from the news sites          |
+| A chart node is on the board     | The feed server set on the chart (default: the Linkhaven server)                                                                                                |
+| A news feed node is on the board | The feeds you added, through the proxy set on the node (default: the Linkhaven server) or directly; with **Images** on, article images from the news sites      |
 | You select **Check Links**       | One `HEAD` request per card URL                                                                                                                                 |
 | You open a link                  | The page itself, in a new tab                                                                                                                                   |
 

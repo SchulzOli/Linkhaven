@@ -4,6 +4,8 @@ import {
   defaultChartFeedUrl,
   defaultFeedProxyUrl,
   readHostServer,
+  resolveChartFeedUrl,
+  resolveFeedProxyUrl,
 } from '../../../../src/features/selfHost/hostServer'
 
 function docWith(content: string | null) {
@@ -57,5 +59,47 @@ describe('host server', () => {
         charts: true,
       }),
     ).toBe('ws://localhost:8790/feed')
+  })
+
+  it('uses the public server outside a self-hosted app', () => {
+    const publicServer = 'https://linkhaven.oli-tech.eu/'
+
+    expect(defaultChartFeedUrl(null, publicServer)).toBe(
+      'wss://linkhaven.oli-tech.eu/feed',
+    )
+    expect(defaultFeedProxyUrl(null, publicServer)).toBe(
+      'https://linkhaven.oli-tech.eu/rss',
+    )
+    // A self-hosted app with charts off doesn't fall back to it.
+    expect(
+      defaultChartFeedUrl(
+        {
+          origin: 'https://links.example.com',
+          sync: true,
+          newsProxy: true,
+          charts: false,
+        },
+        publicServer,
+      ),
+    ).toBe('ws://127.0.0.1:8787/feed')
+  })
+
+  it('points the old local placeholder at the server, keeps own addresses', () => {
+    const publicServer = 'https://linkhaven.oli-tech.eu'
+
+    expect(
+      resolveChartFeedUrl('ws://127.0.0.1:8787/feed', null, publicServer),
+    ).toBe('wss://linkhaven.oli-tech.eu/feed')
+    expect(
+      resolveFeedProxyUrl('http://127.0.0.1:8788/rss', null, publicServer),
+    ).toBe('https://linkhaven.oli-tech.eu/rss')
+    expect(
+      resolveChartFeedUrl('wss://charts.example.com/feed', null, publicServer),
+    ).toBe('wss://charts.example.com/feed')
+    expect(resolveFeedProxyUrl('', null, publicServer)).toBe('')
+    // No server known: the placeholder stays.
+    expect(resolveChartFeedUrl('ws://127.0.0.1:8787/feed', null, '')).toBe(
+      'ws://127.0.0.1:8787/feed',
+    )
   })
 })

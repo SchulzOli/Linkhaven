@@ -12,8 +12,12 @@ npm run dev
 ```
 
 In the taskbar, select **Add chart**. A new chart uses the symbol `AAPL` and
-the URL `ws://127.0.0.1:8787/feed`. To change them, open the chart options
-(slider icon) and go to **Data source**.
+the chart feed of the Linkhaven server: the one the web app came from, or the
+public server (`wss://linkhaven.oli-tech.eu/feed`) in the published app and
+extension. Without either, as in a local `npm run dev`, it uses
+`ws://127.0.0.1:8787/feed` from the command above. Charts that still have
+that local address use the Linkhaven server too when one is known. To change
+the address, open the chart options (slider icon) and go to **Data source**.
 
 ## Symbols
 
