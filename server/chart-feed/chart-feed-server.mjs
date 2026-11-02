@@ -74,7 +74,8 @@ function addLiveListener(symbol, listener) {
           }
         }
       } catch (error) {
-        console.warn(`[feed] live poll ${symbol}: ${error.message}`)
+        // No symbol: the server keeps no record of what is watched.
+        console.warn(`[feed] live poll failed: ${error.name}`)
       }
     }
 
