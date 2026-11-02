@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  chartAndFeedTargets,
   defaultChartFeedUrl,
   defaultFeedProxyUrl,
   readHostServer,
@@ -101,5 +102,38 @@ describe('host server', () => {
     expect(resolveChartFeedUrl('ws://127.0.0.1:8787/feed', null, '')).toBe(
       'ws://127.0.0.1:8787/feed',
     )
+  })
+
+  it('lists the addresses charts and feeds really contact', () => {
+    const publicServer = 'https://linkhaven.oli-tech.eu'
+    const hosts = (urls: string[]) => urls.map((url) => new URL(url).host)
+
+    expect(
+      hosts(
+        chartAndFeedTargets(
+          [
+            { source: { url: 'ws://127.0.0.1:8787/feed' } },
+            { source: { url: 'wss://charts.example.com/feed' } },
+          ],
+          [
+            { proxyUrl: 'http://127.0.0.1:8788/rss', sources: [] },
+            { proxyUrl: 'https://proxy.example.com/rss', sources: [] },
+            // No proxy: the feeds themselves are contacted.
+            {
+              proxyUrl: '',
+              sources: [{ url: 'https://news.example.org/rss.xml' }],
+            },
+          ],
+          null,
+          publicServer,
+        ),
+      ),
+    ).toEqual([
+      'linkhaven.oli-tech.eu',
+      'charts.example.com',
+      'linkhaven.oli-tech.eu',
+      'proxy.example.com',
+      'news.example.org',
+    ])
   })
 })

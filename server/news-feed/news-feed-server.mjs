@@ -72,7 +72,8 @@ export function handleNewsRequest(request, response, url) {
     .catch((error) => {
       const status = error instanceof FeedProxyError ? error.status : 502
 
-      console.warn(`[news] ${target}: ${error.message}`)
+      // Only the status: feed addresses (and tokens in them) stay unlogged.
+      console.warn(`[news] fetch failed (${status})`)
       sendJson(response, status, { error: error.message })
     })
 
