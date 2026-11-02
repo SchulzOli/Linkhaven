@@ -9,10 +9,7 @@ import {
   releaseDataCollection,
   requestDataCollection,
 } from '../../features/privacy/dataCollectionConsent'
-import {
-  resolveChartFeedUrl,
-  resolveFeedProxyUrl,
-} from '../../features/selfHost/hostServer'
+import { chartAndFeedTargets } from '../../features/selfHost/hostServer'
 import { useNetworkFeaturesStore } from '../../state/useNetworkFeaturesStore'
 import { useWorkspaceStore } from '../../state/useWorkspaceStore'
 import { PanelSection, SettingRow, Switch } from '../ui/panel/Panel'
@@ -102,17 +99,9 @@ export function PrivacyPanel({ menuId, tabListId }: PrivacyPanelProps) {
       description:
         'Chart nodes connect to a price feed, news feed nodes load RSS through a proxy.',
       status: features.chartsAndFeeds
-        ? `On · ${nodeCount} · connects to ${hostList([
-            // Where requests really go (old placeholders → the server).
-            ...charts.map((chart) => resolveChartFeedUrl(chart.source.url)),
-            ...feeds.flatMap((feed) => {
-              const proxyUrl = resolveFeedProxyUrl(feed.proxyUrl)
-
-              return proxyUrl.trim()
-                ? [proxyUrl]
-                : feed.sources.map((source) => source.url)
-            }),
-          ])}`
+        ? `On · ${nodeCount} · connects to ${hostList(
+            chartAndFeedTargets(charts, feeds),
+          )}`
         : `Off · no connections · ${nodeCount} paused`,
     },
     {

@@ -111,6 +111,31 @@ export function resolveChartFeedUrl(
     : url
 }
 
+/**
+ * Every address the charts and news feeds on a board contact: each chart's
+ * feed, each feed's proxy, or a feed's own addresses when it has no proxy.
+ * Old placeholders count as the server they resolve to.
+ */
+export function chartAndFeedTargets(
+  charts: Array<{ source: { url: string } }>,
+  feeds: Array<{ proxyUrl: string; sources: Array<{ url: string }> }>,
+  host = getHostServer(),
+  publicServer = DEFAULT_SYNC_SERVER_URL,
+) {
+  return [
+    ...charts.map((chart) =>
+      resolveChartFeedUrl(chart.source.url, host, publicServer),
+    ),
+    ...feeds.flatMap((feed) => {
+      const proxyUrl = resolveFeedProxyUrl(feed.proxyUrl, host, publicServer)
+
+      return proxyUrl.trim()
+        ? [proxyUrl]
+        : feed.sources.map((source) => source.url)
+    }),
+  ]
+}
+
 export function resolveFeedProxyUrl(
   url: string,
   host = getHostServer(),
