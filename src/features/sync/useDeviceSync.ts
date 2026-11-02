@@ -8,8 +8,8 @@ const CHANGE_DELAY_MS = 8 * 1000
 
 /**
  * Keeps devices in step while Device sync is on and set up: syncs when
- * the app opens or comes back to the front, a few seconds after a change,
- * and every few minutes while visible. The sync code itself is only
+ * the app opens, comes back to the front or back online, a few seconds
+ * after a change, and every few minutes while visible. The sync code itself is only
  * loaded once the switch is on.
  */
 export function useDeviceSync() {
@@ -63,10 +63,13 @@ export function useDeviceSync() {
       })
 
       document.addEventListener('visibilitychange', handleVisibility)
+      // Back online: catch up at once instead of at the next interval.
+      window.addEventListener('online', sync)
       cleanups.push(() => {
         window.clearInterval(interval)
         unsubscribe()
         document.removeEventListener('visibilitychange', handleVisibility)
+        window.removeEventListener('online', sync)
       })
 
       if (connection) {

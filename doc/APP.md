@@ -91,8 +91,10 @@ What syncs: workspaces, their order, custom themes and uploaded images.
 What stays on each device: the view position, usage statistics, the Auto
 dashboard, and all settings in Menu → Privacy.
 
-Linkhaven syncs when it opens or comes back to the front, a few seconds
-after a change, and every five minutes while it is open. When two devices
+Linkhaven syncs when it opens, comes back to the front or back online, a
+few seconds after a change, and every five minutes while it is open. The
+cloud in the taskbar shows where it stands (synced, syncing, offline or a
+problem, with the last sync in its tooltip); click it to sync now. When two devices
 change the same workspace before syncing, the newer change wins and the
 other one is kept as a workspace named "… (conflict)".
 
