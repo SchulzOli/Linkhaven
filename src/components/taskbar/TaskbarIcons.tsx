@@ -92,3 +92,14 @@ export function AddChartIcon({ className }: IconProps) {
     </StrokeIcon>
   )
 }
+
+/** Device sync: a cloud with two arrows going round. */
+export function SyncIcon({ className }: IconProps) {
+  return (
+    <StrokeIcon className={className}>
+      <path d="M7 18.5h-.5a4 4 0 0 1-.6-7.96 6 6 0 0 1 11.6-1.04h.5a4.5 4.5 0 0 1 1.5 8.75" />
+      <path d="M9.5 15.5a3 3 0 0 1 5.2-1.3M14.5 18.5a3 3 0 0 1-5.2 1.3" />
+      <path d="M14.9 12.4l-.2 1.8-1.8-.2M9.1 21.6l.2-1.8 1.8.2" />
+    </StrokeIcon>
+  )
+}

@@ -1,6 +1,6 @@
 import styles from './BottomTaskbar.module.css'
 
-import { useEffect, useId, useRef } from 'react'
+import { Suspense, lazy, useEffect, useId, useRef } from 'react'
 
 import type { WorkspaceSummary } from '../../contracts/workspaceDirectory'
 import { useNetworkFeaturesStore } from '../../state/useNetworkFeaturesStore'
@@ -16,6 +16,13 @@ import {
   ImageGalleryIcon,
   UploadImageIcon,
 } from './TaskbarIcons'
+
+// The sync code loads only once sync is on (like the Sync tab).
+const SyncStatusButton = lazy(async () => {
+  const module = await import('./SyncStatusButton')
+
+  return { default: module.SyncStatusButton }
+})
 
 type BottomTaskbarProps = {
   activeWorkspaceId: string
@@ -71,6 +78,7 @@ export function BottomTaskbar({
   const chartsAndFeeds = useNetworkFeaturesStore(
     (state) => state.chartsAndFeeds,
   )
+  const deviceSync = useNetworkFeaturesStore((state) => state.deviceSync)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const workspaceRailRef = useRef<HTMLDivElement | null>(null)
   const workspaceRailToggleRef = useRef<HTMLButtonElement | null>(null)
@@ -338,6 +346,11 @@ export function BottomTaskbar({
           ) : null}
         </div>
         <div className={`${styles.cluster} ${styles.rightCluster}`}>
+          {deviceSync ? (
+            <Suspense fallback={null}>
+              <SyncStatusButton />
+            </Suspense>
+          ) : null}
           <button
             aria-label="Toggle interaction mode"
             aria-pressed={interactionMode === 'edit'}
